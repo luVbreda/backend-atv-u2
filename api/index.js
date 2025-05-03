@@ -1,6 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import db from './database/configdb.js';
+import userRoute from './routes/user.route.js';
 import User from './models/User.js';
 
 dotenv.config();
@@ -10,6 +11,7 @@ const app = express();
 
 app.use(express.json());
 
+app.use("/users", userRoute);
 app.get('/', (req, res) => {
     res.send('Hello World!');
 });

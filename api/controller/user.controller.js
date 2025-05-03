@@ -32,23 +32,24 @@ const login = async (req, res) => {
 
     try {
         const user = await User.findOne({ username }).select('+password');
-        if(!user) {
-            console.log("User not found:", username);
+        if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
+
         const isMatch = await bcrypt.compare(password, user.password);
-        console.log("Password match:", isMatch);
-        if(!isMatch) {
+        if (!isMatch) {
             return res.status(401).json({ message: 'Invalid credentials' });
         }
-        console.log("User logged in successfully:", user.username);
+
+        // Gere o token JWT
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-        return res.status(200).json({ message: 'User logged in successfully', token});
+
+        // Retorne o token na resposta
+        return res.status(200).json({ message: 'Login successful', token });
     } catch (error) {
-        console.error("Error logging in user:", error);
-        return res.status(500).json({ message: `Error logging in user ${error}` });
+        console.error("Error logging in user", error);
+        return res.status(500).json({ message: `Error logging in user ${error.message}` });
     }
 };
-
 
 export default { register, login };

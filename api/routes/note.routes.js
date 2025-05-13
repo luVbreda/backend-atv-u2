@@ -6,7 +6,7 @@ import {
   updateNote,
   partialUpdateNote,
   deleteNote,
-} from '../controllers/note.controller.js'; // Certifique-se de que o caminho está correto
+} from '../controller/note.controller.js'; // Certifique-se de que o caminho está correto
 import verifyToken from '../middleware/jwt.token.middleware.js'; // Corrige o caminho para o middleware
 
 const router = express.Router();

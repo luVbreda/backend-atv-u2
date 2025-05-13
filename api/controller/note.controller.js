@@ -1,10 +1,10 @@
-const Note = require('../models/note.model');
+import Note from '../models/note.model.js';
 
 // Criar uma nova nota
-exports.createNote = async (req, res) => {
+export const createNote = async (req, res) => {
   try {
     const { title, content } = req.body;
-    const userId = req.user.id; // Obtém o ID do usuário autenticado
+    const userId = req.userId; // Obtém o ID do usuário autenticado
 
     const note = await Note.create({ title, content, userId });
     res.status(201).json(note);
@@ -14,9 +14,9 @@ exports.createNote = async (req, res) => {
 };
 
 // Listar todas as notas do usuário autenticado
-exports.getAllNotes = async (req, res) => {
+export const getAllNotes = async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.userId;
     const notes = await Note.find({ userId });
     res.status(200).json(notes);
   } catch (error) {
@@ -25,10 +25,10 @@ exports.getAllNotes = async (req, res) => {
 };
 
 // Obter detalhes de uma nota
-exports.getNoteById = async (req, res) => {
+export const getNoteById = async (req, res) => {
   try {
     const { id } = req.params;
-    const userId = req.user.id;
+    const userId = req.userId;
 
     const note = await Note.findOne({ _id: id, userId });
     if (!note) {
@@ -42,11 +42,11 @@ exports.getNoteById = async (req, res) => {
 };
 
 // Atualizar todos os dados de uma nota
-exports.updateNote = async (req, res) => {
+export const updateNote = async (req, res) => {
   try {
     const { id } = req.params;
     const { title, content } = req.body;
-    const userId = req.user.id;
+    const userId = req.userId;
 
     const note = await Note.findOneAndUpdate(
       { _id: id, userId },
@@ -65,10 +65,10 @@ exports.updateNote = async (req, res) => {
 };
 
 // Atualizar parcialmente uma nota
-exports.partialUpdateNote = async (req, res) => {
+export const partialUpdateNote = async (req, res) => {
   try {
     const { id } = req.params;
-    const userId = req.user.id;
+    const userId = req.userId;
 
     const note = await Note.findOneAndUpdate(
       { _id: id, userId },
@@ -87,10 +87,10 @@ exports.partialUpdateNote = async (req, res) => {
 };
 
 // Deletar uma nota
-exports.deleteNote = async (req, res) => {
+export const deleteNote = async (req, res) => {
   try {
     const { id } = req.params;
-    const userId = req.user.id;
+    const userId = req.userId;
 
     const note = await Note.findOneAndDelete({ _id: id, userId });
     if (!note) {

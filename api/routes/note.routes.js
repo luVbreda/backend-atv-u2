@@ -1,17 +1,25 @@
-const express = require('express');
-const router = express.Router();
-const noteController = require('../controllers/note.controller');
-const authMiddleware = require('../middlewares/auth.middleware'); // Middleware para verificar JWT
+import express from 'express';
+import {
+  createNote,
+  getAllNotes,
+  getNoteById,
+  updateNote,
+  partialUpdateNote,
+  deleteNote,
+} from '../controllers/note.controller.js';
+import authMiddleware from '../middlewares/auth.middleware.js';
 
-// Protege todas as rotas com o middleware de autenticação
+const router = express.Router();
+
+// Aplica o middleware de autenticação em todas as rotas
 router.use(authMiddleware);
 
 // Rotas CRUD
-router.post('/', noteController.createNote); // Criar uma nova nota
-router.get('/', noteController.getAllNotes); // Listar todas as notas do usuário
-router.get('/:id', noteController.getNoteById); // Obter detalhes de uma nota
-router.put('/:id', noteController.updateNote); // Atualizar todos os dados de uma nota
-router.patch('/:id', noteController.partialUpdateNote); // Atualizar parcialmente uma nota
-router.delete('/:id', noteController.deleteNote); // Deletar uma nota
+router.post('/', createNote); // Criar uma nova nota
+router.get('/', getAllNotes); // Listar todas as notas do usuário
+router.get('/:id', getNoteById); // Obter detalhes de uma nota
+router.put('/:id', updateNote); // Atualizar todos os dados de uma nota
+router.patch('/:id', partialUpdateNote); // Atualizar parcialmente uma nota
+router.delete('/:id', deleteNote); // Deletar uma nota
 
-module.exports = router;
+export default router; // Exporta o roteador como padrão

@@ -6,13 +6,13 @@ import {
   updateNote,
   partialUpdateNote,
   deleteNote,
-} from '../controller/note.controller.js';
-import authMiddleware from '../middleware/auth.middleware.js';
+} from '../controllers/note.controller.js'; // Certifique-se de que o caminho está correto
+import verifyToken from '../middleware/jwt.token.middleware.js'; // Corrige o caminho para o middleware
 
 const router = express.Router();
 
 // Aplica o middleware de autenticação em todas as rotas
-router.use(authMiddleware);
+router.use(verifyToken);
 
 // Rotas CRUD
 router.post('/', createNote); // Criar uma nova nota

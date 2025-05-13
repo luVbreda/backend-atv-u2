@@ -6,7 +6,7 @@ import {
   updateNote,
   partialUpdateNote,
   deleteNote,
-} from '../controllers/note.controller.js';
+} from '../controller/note.controller.js';
 import authMiddleware from '../middlewares/auth.middleware.js';
 
 const router = express.Router();

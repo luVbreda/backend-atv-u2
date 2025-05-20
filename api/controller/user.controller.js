@@ -65,4 +65,3 @@ export const getUserProfile = async (req, res) => {
 
 export const registerUser = register;
 export const loginUser = login;
-export { getUserProfile };

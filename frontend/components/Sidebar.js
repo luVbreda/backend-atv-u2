@@ -1,5 +1,7 @@
 window.Sidebar = function Sidebar({ user, onNavigate, onLogout, theme, toggleTheme }) {
   const [open, setOpen] = React.useState(window.innerWidth > 1024);
+  const [searchQuery, setSearchQuery] = React.useState('');
+  const [searchResults, setSearchResults] = React.useState([]);
 
   React.useEffect(() => {
     function handleResize() {
@@ -9,9 +11,24 @@ window.Sidebar = function Sidebar({ user, onNavigate, onLogout, theme, toggleThe
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  React.useEffect(() => {
+    if (searchQuery.length > 2) {
+      const results = mockUserData.filter(user =>
+        user.username.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      setSearchResults(results);
+    } else {
+      setSearchResults([]);
+    }
+  }, [searchQuery]);
+
   function handleNav(page) {
     onNavigate(page);
     if (window.innerWidth <= 1024) setOpen(false);
+  }
+
+  function handleUserSearch(query) {
+    setSearchQuery(query);
   }
 
   return (
@@ -38,6 +55,7 @@ window.Sidebar = function Sidebar({ user, onNavigate, onLogout, theme, toggleThe
       </button>
       <nav className={`sidebar${open ? ' open' : ''}`}>
         <div style={{ marginBottom: 30, textAlign: 'center' }}>
+          {user.photo && <img src={user.photo} alt="Foto do usuário" className="profile-photo" />}
           <img
             src={user?.avatar || "https://ui-avatars.com/api/?name=" + encodeURIComponent(user?.name || user?.username || "U")}
             alt="Avatar"
@@ -69,6 +87,21 @@ window.Sidebar = function Sidebar({ user, onNavigate, onLogout, theme, toggleThe
         <button className="logout-btn" onClick={onLogout} style={{ marginTop: 30 }}>
           Sair
         </button>
+        <div style={{ marginTop: 30 }}>
+          <input
+            type="text"
+            placeholder="Pesquisar usuários..."
+            onChange={e => handleUserSearch(e.target.value)}
+            style={{ width: "90%", padding: 6, borderRadius: 6, border: "1px solid #ccc" }}
+          />
+          <div id="search-results">
+            {searchResults.map(result => (
+              <div key={result.id} className="search-result" onClick={() => handleNav('profile', result)}>
+                {result.username}
+              </div>
+            ))}
+          </div>
+        </div>
       </nav>
     </>
   );

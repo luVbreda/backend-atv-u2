@@ -9,6 +9,7 @@ window.Register = function Register({ onRegister, onSwitchToLogin, onShowAbout, 
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState('');
   const [success, setSuccess] = React.useState('');
+  const [photo, setPhoto] = React.useState('');
 
   function handleChange(e) {
     const { name, value, files } = e.target;
@@ -125,16 +126,12 @@ window.Register = function Register({ onRegister, onSwitchToLogin, onShowAbout, 
           autoComplete="new-password"
           required
         />
-        <label style={{ color: "#D1D5DB", fontSize: "0.95em", marginBottom: 8 }}>
-          Foto de perfil (opcional):
-          <input
-            name="avatar"
-            type="file"
-            accept="image/*"
-            onChange={handleChange}
-            style={{ display: "block", marginTop: 4 }}
-          />
-        </label>
+        <input
+          type="text"
+          placeholder="URL da foto (opcional)"
+          value={photo}
+          onChange={e => setPhoto(e.target.value)}
+        />
         {error && <div className="form-error">{error}</div>}
         {success && <div className="form-success">{success}</div>}
         <button type="submit" disabled={loading} style={{ width: '100%' }}>

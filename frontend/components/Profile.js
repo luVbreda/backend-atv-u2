@@ -43,6 +43,7 @@ window.Profile = function Profile({ token, user, onEditProfile, showNotification
   return (
     <div>
       <div className="profile-header">
+        {user.photo && <img src={user.photo} alt="Foto do usuário" className="profile-photo" />}
         <img
           src={profile.avatar || "https://ui-avatars.com/api/?name=" + encodeURIComponent(profile.name || profile.username || "U")}
           alt="Avatar"

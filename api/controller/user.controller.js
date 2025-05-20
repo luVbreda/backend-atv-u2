@@ -4,9 +4,9 @@ import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
 
 // REGISTRO DE USUÁRIO
-const register = async (req, res) => {
+export async function registerUser(req, res) {
     console.log("Registering user:", req.body);
-    const { username, email, password, name, bio } = req.body;
+    const { username, email, password, name, bio, photo } = req.body;
 
     if (!username || !email || !password) {
         return res.status(400).json({ message: 'Username, email, and password are required' });
@@ -25,14 +25,19 @@ const register = async (req, res) => {
         }
 
         // Cria usuário
-        const savedUser = await createUser(username, email, password, name, bio);
-        console.log("Saved user:", savedUser);
+        const user = new User({
+            username,
+            email,
+            password,
+            photo: photo || "", // salva a foto se enviada
+        });
+        await user.save();
 
         // Gera token JWT
-        const token = jwt.sign({ id: savedUser._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
         // Retorna usuário sem senha
-        const userToReturn = await User.findById(savedUser._id).select('-password');
+        const userToReturn = await User.findById(user._id).select('-password');
         return res.status(201).json({ message: 'User registered successfully', user: userToReturn, token });
     } catch (error) {
         console.error("Error saving user:", error);
@@ -91,10 +96,11 @@ export const getUserProfile = async (req, res) => {
 export const updateUserProfile = async (req, res) => {
     try {
         const { username } = req.params;
-        const { name, bio } = req.body;
+        const { name, bio, photo } = req.body;
         let update = {};
         if (name) update.name = name;
         if (bio) update.bio = bio;
+        if (photo) update.photo = photo;
 
         // Se for upload de avatar, trate aqui (exemplo simplificado)
         if (req.file) {
@@ -138,5 +144,4 @@ export const updateUserSettings = async (req, res) => {
 };
 
 // Exporte as funções para uso nas rotas
-export const registerUser = register;
 export const loginUser = login;

@@ -63,4 +63,6 @@ export const getUserProfile = async (req, res) => {
   }
 };
 
-export default { register, login };
+export const registerUser = register;
+export const loginUser = login;
+export { getUserProfile };

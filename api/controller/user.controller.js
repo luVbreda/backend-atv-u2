@@ -49,4 +49,18 @@ const login = async (req, res) => {
     }
 };
 
+export const getUserProfile = async (req, res) => {
+  try {
+    const { username } = req.params;
+    // Busque o usuário pelo username
+    const user = await User.findOne({ username }).select('-password');
+    if (!user) {
+      return res.status(404).json({ message: 'Usuário não encontrado' });
+    }
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ message: 'Erro ao buscar perfil', error: error.message });
+  }
+};
+
 export default { register, login };

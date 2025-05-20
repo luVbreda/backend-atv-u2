@@ -1,4 +1,4 @@
-import { registerUser, loginUser, getUserProfile, updateUserProfile, updateUserSettings } from '../api/controller/user.controller.js';
+import { registerUser, loginUser, getUserProfile, updateUserProfile, updateUserSettings } from '../controller/user.controller.js';
 
 export default async function handler(req, res) {
   const { method, url } = req;
